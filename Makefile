@@ -26,15 +26,20 @@ $(GRAAL_HOME)/bin/native-image: $(GRAAL_HOME)
 graalvm: $(GRAAL_HOME)/bin/native-image
 # }}}
 
+target/cli.jar:
+	clojure -T:build uberjar
+
+.PHONY: uberjar
+uberjar: target/cli.jar
+
+.PHONY: cli
+cli: graalvm uberjar
+	make --version
+
+.PHONY: native-image
+native-image: clean cli
 
 .PHONY: clean
 clean:
 	\rm -rf target .cpcache
 	\rm -f cli cli.linux-amd64 cli.darwin-amd64
-
-.PHONY: cli
-cli: graalvm
-	make --version
-
-.PHONY: native-image
-native-image: clean cli

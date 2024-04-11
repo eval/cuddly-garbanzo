@@ -1,0 +1,5 @@
+{:lib         com.github.eval/cli
+ :description "Simplest thing that runs everywhere"
+ :version     "0.1.{{git/commit-count}}"
+ :main        cli.main
+ :uber-file   "target/cli.jar"}
