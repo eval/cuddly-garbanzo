@@ -1,4 +1,6 @@
 {:paths ["src"]
+ :deps {;; GraalVM
+        com.github.clj-easy/graal-build-time {:mvn/version "1.0.5"}}
  :aliases
  {:build
   {:deps       {com.github.liquidz/build.edn {:git/tag "0.11.241" :git/sha "277bf6e"}}

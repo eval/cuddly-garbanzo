@@ -34,7 +34,19 @@ uberjar: target/cli.jar
 
 .PHONY: cli
 cli: graalvm uberjar
-	make --version
+	$(GRAAL_HOME)/bin/native-image \
+		-jar target/cli.jar \
+		-H:Name=cli \
+		-H:+ReportExceptionStackTraces \
+		-J-Dclojure.spec.skip-macros=true \
+		-J-Dclojure.compiler.direct-linking=true \
+		--features=clj_easy.graal_build_time.InitClojureClasses \
+		--report-unsupported-elements-at-runtime \
+		-H:Log=registerResource: \
+		--verbose \
+		--no-fallback \
+		$(GRAAL_EXTRA_OPTION) \
+		"-J-Xmx3g"
 
 .PHONY: native-image
 native-image: clean cli
@@ -42,4 +54,4 @@ native-image: clean cli
 .PHONY: clean
 clean:
 	\rm -rf target .cpcache
-	\rm -f cli cli.linux-amd64 cli.darwin-amd64
+	\rm -f cli cli.build_artifacts.txt cli.linux-amd64 cli.darwin-amd64

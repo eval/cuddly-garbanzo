@@ -6,6 +6,10 @@ Working:
 
 ``` shell
 make native-image
+
 # then
 java -jar target/cli.jar
+
+# and of course
+./cli
 ```
