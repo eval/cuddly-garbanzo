@@ -1,0 +1,48 @@
+name: Build native image
+on:
+  push:
+
+jobs:
+  linux-amd64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DeLaGuardo/setup-clojure@master
+        with:
+          cli: latest
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2
+            /tmp/.graalvm
+          key: v1-linux-native-image-${{ hashFiles('Makefile', 'deps.edn') }}
+      - name: Build native image
+        run: make native-image
+      - name: Rename
+        run: mv cli cli.linux-amd64
+      - uses: actions/upload-artifact@master
+        with:
+          name: cli.linux-amd64
+          path: ./cli.linux-amd64
+
+  darwin-amd64:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DeLaGuardo/setup-clojure@master
+        with:
+          cli: latest
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2
+            /tmp/.graalvm
+          key: v1-mac-native-image-${{ hashFiles('Makefile', 'deps.edn') }}
+      - name: Build native image
+        run: make native-image
+      - name: Rename
+        run: mv cli cli.darwin-amd64
+      - uses: actions/upload-artifact@master
+        with:
+          name: cli.darwin-amd64
+          path: ./cli.darwin-amd64
